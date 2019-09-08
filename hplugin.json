@@ -1,0 +1,15 @@
+{
+    "id": "a132549b-7d10-4daa-918b-03227c7100fd",
+    "entry": "main.py",
+    "shortname": "h2r-metadata",
+    "name": "Hentai2Read Metadata",
+    "author": "CarrotPancake",
+    "version": "0.0.1",
+    "description": "Plugin that fetches metadata from Hentai2Read",
+    "test": "test.py",
+    "website": "https://github.com/CarrotPancake/h2r-metadata",
+    "update_url": "https://github.com/CarrotPancake/h2r-metadata",
+    "require": [
+        "happypandax >= 0.11.2"
+    ]
+}
