@@ -198,8 +198,7 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
         # TODO Add if possible
         pass
     if meta_data.get("description"):
-        # TODO Add if possible
-        pass
+        gallery_data.info = meta_data.get("description")
     
     return gallery_data
 
