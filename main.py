@@ -59,11 +59,14 @@ def query(itemtuple):
             quoted_filename = urllib.parse.quote(h2r_name)
 
             h2r_url = urllib.parse.urljoin(H2R_BASE_URL, quoted_filename)
-            # TODO Anything else needed?
+            
+            chapter_number = _extract_chapter_number(filename)
+
             meta_data.append(hpx.command.MetadataData(
                     metadataitem = item,
                     data={
                         'h2r_url': h2r_url,
+                        "chapter_number": chapter_number,
                         }))
     
     return tuple(meta_data)
@@ -71,6 +74,22 @@ def query(itemtuple):
 def _to_h2r_name(filename):
     filename = CHAPTER_PATTERN.sub("", filename)
     return filename.lower()
+
+def _extract_chapter_number(filename):
+    match = CHAPTER_PATTERN.search(filename)
+    if not match:
+        log.debug(f"Did not find any chapter suffix in '{filename}'")
+        return None
+    
+    chapter_suffix = match.group(0)
+    number_match = re.search(r"\d", chapter_suffix)
+    if not number_match:
+        log.debug(f"Found no digits in '{chapter_suffix}'")
+        return None
+    
+    chapter_number = int(number_match.group(0))
+    log.debug(f"Extracted chapter number '{chapter_number}' from '{filename}'")
+    return chapter_number
 
 @hpx.attach("Metadata.apply", trigger="h2r-metadata")
 def apply(datatuple):
@@ -82,7 +101,7 @@ def apply(datatuple):
         r = hpx.command.SingleGETRequest().request(h2r_url)
         # TODO Might want to add logging for not ok response
         if r.ok:
-            parsed_data = _parse_page(r.text, h2r_url)
+            parsed_data = _parse_page(r.text, h2r_url, item.data.get("chapter_number"))
             log.debug(f"Parsed data from response: {parsed_data}")
             gallery_data = _map_to_hpx_gallery_data(item.item, parsed_data)
             log.debug(f"About to update item with gallery data: {gallery_data}")
@@ -93,13 +112,14 @@ def apply(datatuple):
             results.append(hpx.command.MetadataResult(data=item, status=success))
     return tuple(results)
 
-def _parse_page(html, url):
+def _parse_page(html, url, chapter_number):
     meta_data = {
       "artists": set(),
       "tags": [],
       "parodies": [],
       "url": url,
-      "characters": []
+      "characters": [],
+      "chapter_number": chapter_number
     }
 
     soup = BeautifulSoup(html, "html.parser")
@@ -199,6 +219,8 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
         pass
     if meta_data.get("description"):
         gallery_data.info = meta_data.get("description")
+    if meta_data.get("chapter_number"):
+        gallery_data.number = meta_data["chapter_number"]
     
     return gallery_data
 
