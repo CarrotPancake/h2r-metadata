@@ -198,6 +198,11 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
         title_data.language = hpx.command.LanguageData(name="english")
         gallery_data.titles = [title_data]
 
+        status = None
+        if meta_data.get("status"):
+            status = hpx.command.StatusData(name=meta_data["status"])
+        gallery_data.grouping = hpx.command.GroupingData(name=title, status=status)
+
     tags = _map_to_hpx_gallery_tags(meta_data)
     if len(tags) > 0:
         gallery_data.tags = tags
@@ -214,9 +219,6 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
         gallery_data.urls = [hpx.command.UrlData(name=meta_data["url"])]
     if meta_data.get("language"):
         gallery_data.language = hpx.command.LanguageData(name=meta_data["language"])
-    if meta_data.get("status"):
-        # TODO Add if possible
-        pass
     if meta_data.get("description"):
         gallery_data.info = meta_data.get("description")
     if meta_data.get("chapter_number"):
