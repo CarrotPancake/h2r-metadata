@@ -151,12 +151,19 @@ def _parse_page(html, url, chapter_number):
             meta_data["language"] = text
         elif (_get_list_bullet_name(tb) == "status"):
             meta_data["status"] = text
-        elif (_get_list_bullet_name(tb) == "storyline"):
-            meta_data["description"] = text
         elif (_get_list_bullet_name(tb) == "character"):
             meta_data["characters"].append(text)
         else:
             meta_data["tags"].append(text)
+
+    story_bullet_name = soup.find("b", text="Storyline")
+    if story_bullet_name:
+      story_element = story_bullet_name.find_next_sibling("p")
+      if story_element:
+        text = story_element.get_text()
+        if _has_description_text(text):
+          meta_data["description"] = text
+
     return meta_data
 
 def _get_list_bullet_name(tag_button):
@@ -169,6 +176,12 @@ def _get_list_bullet_name(tag_button):
         return None
   
     return bullet_text.lower().strip(string.whitespace + string.punctuation)
+
+def _has_description_text(text):
+    if not text:
+        return False
+    no_description_pattern = re.compile(r"[Nn]othing yet")
+    return not no_description_pattern.match(text)
 
 def _map_to_hpx_gallery_data(gallery, meta_data):
     """
