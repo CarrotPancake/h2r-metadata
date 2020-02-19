@@ -135,7 +135,7 @@ def _parse_page(html, url, chapter_number):
     tag_buttons = soup.find_all(class_="tagButton")
     for tb in tag_buttons:
         text = tb.get_text()
-        text = text.strip(string.whitespace + string.punctuation)
+        text = text.strip(string.whitespace + "-")
         if not text:
             continue
         
