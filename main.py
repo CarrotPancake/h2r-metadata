@@ -233,6 +233,9 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
         gallery_data.info = meta_data.get("description")
     if meta_data.get("chapter_number"):
         gallery_data.number = meta_data["chapter_number"]
+
+    if meta_data.get("chapter_number"):
+        gallery_data.category = hpx.command.CategoryData(name="Manga")
     
     return gallery_data
 
