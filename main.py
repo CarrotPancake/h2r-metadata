@@ -132,28 +132,25 @@ def _parse_page(html, url, chapter_number):
       if title:
         meta_data["title"] = title
 
-    ignore_text_pattern = re.compile(r"^\d+[\d,. ]*\s?[a-zA-Z]*$")
-    artist_pattern = re.compile(r"/(artist)|(author)/")
-
     tag_buttons = soup.find_all(class_="tagButton")
     for tb in tag_buttons:
         text = tb.get_text()
         text = text.strip(string.whitespace + string.punctuation)
         if not text:
             continue
-        if ignore_text_pattern.search(text):
-            continue
-        if artist_pattern.search(tb["href"]):
+        
+        bullet_name = _get_list_bullet_name(tb)
+        if bullet_name == "artist" or bullet_name == "author":
             meta_data["artists"].add(text)
-        elif (_get_list_bullet_name(tb) == "parody"):
+        elif (bullet_name == "parody"):
             meta_data["parodies"].append(text)
-        elif (_get_list_bullet_name(tb) == "language"):
+        elif (bullet_name == "language"):
             meta_data["language"] = text
-        elif (_get_list_bullet_name(tb) == "status"):
+        elif (bullet_name == "status"):
             meta_data["status"] = text
-        elif (_get_list_bullet_name(tb) == "character"):
+        elif (bullet_name == "character"):
             meta_data["characters"].append(text)
-        else:
+        elif (bullet_name == "category" or bullet_name == "content"):
             meta_data["tags"].append(text)
 
     story_bullet_name = soup.find("b", text="Storyline")
