@@ -29,6 +29,11 @@ No further action should be required by the user once installed.
 
 ## Changelog
 
+- v0.2.0
+
+  - Removes 'dj' suffix from parody
+  - Sets archive category based on parody
+
 - v0.1.0
 
   - Parses and sets additional metadata
