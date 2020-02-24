@@ -143,7 +143,8 @@ def _parse_page(html, url, chapter_number):
         if bullet_name == "artist" or bullet_name == "author":
             meta_data["artists"].add(text)
         elif (bullet_name == "parody"):
-            meta_data["parodies"].append(text)
+            parody = _parse_parody(text)
+            meta_data["parodies"].append(parody)
         elif (bullet_name == "language"):
             meta_data["language"] = text
         elif (bullet_name == "status"):
@@ -179,6 +180,10 @@ def _has_description_text(text):
         return False
     no_description_pattern = re.compile(r"[Nn]othing yet")
     return not no_description_pattern.match(text)
+
+def _parse_parody(parody_text):
+    doujnshi_pattern = re.compile(r"dj\.?\s*$", re.IGNORECASE)
+    return re.sub(doujnshi_pattern, "", parody_text).strip()
 
 def _map_to_hpx_gallery_data(gallery, meta_data):
     """
