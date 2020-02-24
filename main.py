@@ -119,7 +119,8 @@ def _parse_page(html, url, chapter_number):
       "parodies": [],
       "url": url,
       "characters": [],
-      "chapter_number": chapter_number
+      "chapter_number": chapter_number,
+      "category": "Manga"
     }
 
     soup = BeautifulSoup(html, "html.parser")
@@ -145,6 +146,8 @@ def _parse_page(html, url, chapter_number):
         elif (bullet_name == "parody"):
             parody = _parse_parody(text)
             meta_data["parodies"].append(parody)
+            if parody:
+                meta_data["category"] = "Doujinshi"
         elif (bullet_name == "language"):
             meta_data["language"] = text
         elif (bullet_name == "status"):
@@ -239,8 +242,8 @@ def _map_to_hpx_gallery_data(gallery, meta_data):
     if meta_data.get("chapter_number"):
         gallery_data.number = meta_data["chapter_number"]
 
-    if meta_data.get("chapter_number"):
-        gallery_data.category = hpx.command.CategoryData(name="Manga")
+    if "category" in meta_data:
+        gallery_data.category = hpx.command.CategoryData(name=string.capwords(meta_data["category"]))
     
     return gallery_data
 
