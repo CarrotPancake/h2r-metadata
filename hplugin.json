@@ -4,7 +4,7 @@
     "shortname": "h2r-metadata",
     "name": "Hentai2Read Metadata",
     "author": "CarrotPancake",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Plugin that fetches metadata from Hentai2Read",
     "test": "test.py",
     "website": "https://github.com/CarrotPancake/h2r-metadata",

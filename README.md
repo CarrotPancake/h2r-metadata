@@ -29,6 +29,10 @@ No further action should be required by the user once installed.
 
 ## Changelog
 
+- v0.2.1
+
+  - Support decimal chapter names
+
 - v0.2.0
 
   - Removes 'dj' suffix from parody
