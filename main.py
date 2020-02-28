@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 log = hpx.get_logger(__name__)
 
-CHAPTER_PATTERN = re.compile(r"_chapter_\d+\w*$")
+CHAPTER_PATTERN = re.compile(r"_chapter_\d+\.?\w*$")
 
 H2R_BASE_URL = "https://hentai2read.com"
 
